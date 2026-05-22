@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 680" role="img" aria-labelledby="title desc">
+  <title id="title">Salon booking illustration</title>
+  <desc id="desc">A warm salon reception scene with appointment cards, a mirror, styling chair, and product shelf.</desc>
+  <defs>
+    <linearGradient id="wall" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#fff7ed"/>
+      <stop offset="0.48" stop-color="#ecfeff"/>
+      <stop offset="1" stop-color="#f8fafc"/>
+    </linearGradient>
+    <linearGradient id="desk" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0f766e"/>
+      <stop offset="1" stop-color="#134e4a"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#0f172a" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="900" height="680" rx="42" fill="url(#wall)"/>
+  <circle cx="715" cy="100" r="92" fill="#fef3c7"/>
+  <circle cx="145" cy="540" r="118" fill="#ccfbf1"/>
+  <rect x="94" y="80" width="712" height="520" rx="34" fill="#ffffff" filter="url(#shadow)"/>
+  <rect x="138" y="126" width="250" height="230" rx="30" fill="#f8fafc" stroke="#d9dee7" stroke-width="5"/>
+  <circle cx="263" cy="241" r="82" fill="#e0f2fe" stroke="#0f766e" stroke-width="8"/>
+  <path d="M213 246c24 38 75 42 102 5" fill="none" stroke="#b45309" stroke-width="12" stroke-linecap="round"/>
+  <path d="M219 210c28-37 71-36 98-1" fill="none" stroke="#0f766e" stroke-width="11" stroke-linecap="round"/>
+  <rect x="464" y="128" width="250" height="54" rx="14" fill="#f1f5f9"/>
+  <rect x="464" y="204" width="250" height="54" rx="14" fill="#f1f5f9"/>
+  <rect x="464" y="280" width="250" height="54" rx="14" fill="#f1f5f9"/>
+  <circle cx="502" cy="155" r="15" fill="#0f766e"/>
+  <circle cx="502" cy="231" r="15" fill="#b45309"/>
+  <circle cx="502" cy="307" r="15" fill="#0f766e"/>
+  <rect x="534" y="146" width="130" height="14" rx="7" fill="#64748b"/>
+  <rect x="534" y="222" width="150" height="14" rx="7" fill="#64748b"/>
+  <rect x="534" y="298" width="112" height="14" rx="7" fill="#64748b"/>
+  <rect x="126" y="432" width="650" height="104" rx="26" fill="url(#desk)"/>
+  <rect x="176" y="394" width="132" height="84" rx="18" fill="#fffbeb" stroke="#f59e0b" stroke-width="5"/>
+  <rect x="206" y="420" width="72" height="9" rx="4.5" fill="#b45309"/>
+  <rect x="206" y="444" width="56" height="9" rx="4.5" fill="#0f766e"/>
+  <rect x="384" y="384" width="170" height="116" rx="22" fill="#ecfeff" stroke="#0891b2" stroke-width="5"/>
+  <path d="M420 432h98M420 462h64" stroke="#0f766e" stroke-width="12" stroke-linecap="round"/>
+  <rect x="620" y="374" width="92" height="136" rx="24" fill="#fee2e2" stroke="#fb7185" stroke-width="5"/>
+  <path d="M652 406h28M652 436h28M652 466h28" stroke="#9f1239" stroke-width="10" stroke-linecap="round"/>
+  <path d="M170 536h562" stroke="#0f172a" stroke-opacity="0.16" stroke-width="10" stroke-linecap="round"/>
+</svg>
