@@ -6,19 +6,39 @@ $errors = [];
 $email = '';
 $successMessage = isset($_GET['registered']) ? 'Registration successful. Please login.' : '';
 
+if (isset($_GET['logout'])) {
+    $successMessage = 'You have been logged out successfully.';
+}
+
+if (!isset($_SESSION['login_attempts'])) {
+    $_SESSION['login_attempts'] = 0;
+}
+
+if (!isset($_SESSION['lock_time'])) {
+    $_SESSION['lock_time'] = null;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
+    if ($_SESSION['lock_time'] && time() < $_SESSION['lock_time']) {
+        $errors[] = 'Too many failed login attempts. Please try again later.';
+    }
+
     if ($email === '' || $password === '') {
         $errors[] = 'Email and password are required.';
-    } else {
+    } elseif (empty($errors)) {
         try {
             $stmt = $pdo->prepare('SELECT user_id, full_name, email, password_hash, role FROM users WHERE email = ? LIMIT 1');
             $stmt->execute([$email]);
             $user = $stmt->fetch();
 
             if ($user && password_verify($password, $user['password_hash'])) {
+
+                $_SESSION['login_attempts'] = 0;
+                $_SESSION['lock_time'] = null;
+
                 session_regenerate_id(true);
                 $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['full_name'] = $user['full_name'];
@@ -34,7 +54,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
 
-            $errors[] = 'Invalid email or password.';
+            $_SESSION['login_attempts']++;
+
+            if ($_SESSION['login_attempts'] >= 3) {
+                $_SESSION['lock_time'] = time() + 60;
+                $errors[] = 'Too many failed login attempts. Please wait 1 minute.';
+            } else {
+                $errors[] = 'Invalid email or password.';
+            }
+
         } catch (PDOException $e) {
             error_log('Login error: ' . $e->getMessage());
             $errors[] = 'Login failed. Please try again.';

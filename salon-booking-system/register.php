@@ -22,10 +22,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'A valid email address is required.';
     }
 
+    if ($phone !== '' && !preg_match('/^[0-9+\-\s]{8,15}$/', $phone)) {
+        $errors[] = 'Please enter a valid phone number.';
+    }
+
     if ($password === '') {
         $errors[] = 'Password is required.';
-    } elseif (strlen($password) < 6) {
-        $errors[] = 'Password must be at least 6 characters.';
+    } elseif (
+        strlen($password) < 8 ||
+        !preg_match('/[A-Z]/', $password) ||
+        !preg_match('/[a-z]/', $password) ||
+        !preg_match('/[0-9]/', $password)
+    ) {
+        $errors[] = 'Password must be at least 8 characters and include uppercase, lowercase, and number.';
     }
 
     if ($password !== $confirmPassword) {
@@ -34,11 +43,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         try {
-            $stmt = $pdo->prepare('SELECT user_id FROM users WHERE email = ? LIMIT 1');
-            $stmt->execute([$email]);
+            $stmt = $pdo->prepare('SELECT user_id FROM users WHERE email = ? OR phone = ? LIMIT 1');
+            $stmt->execute([$email, $phone]);
 
             if ($stmt->fetch()) {
-                $errors[] = 'An account with this email already exists.';
+                $errors[] = 'An account with this email or phone number already exists.';
             } else {
                 $passwordHash = password_hash($password, PASSWORD_DEFAULT);
                 $insert = $pdo->prepare(
@@ -83,10 +92,10 @@ include __DIR__ . '/includes/header.php';
         <input type="text" id="phone" name="phone" value="<?php echo e($phone); ?>">
 
         <label for="password">Password</label>
-        <input type="password" id="password" name="password" minlength="6" required>
+        <input type="password" id="password" name="password" minlength="8" required>
 
         <label for="confirm_password">Confirm Password</label>
-        <input type="password" id="confirm_password" name="confirm_password" minlength="6" required>
+        <input type="password" id="confirm_password" name="confirm_password" minlength="8" required>
 
         <button class="btn btn-primary" type="submit">Register</button>
     </form>
