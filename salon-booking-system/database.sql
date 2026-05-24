@@ -1,10 +1,19 @@
-CREATE DATABASE IF NOT EXISTS salondb;
+-- Secure Salon Appointment Booking System
+-- Database setup file for ICT312 Assignment 02.
+-- Import this file in phpMyAdmin or MySQL to create the local database.
+
+CREATE DATABASE IF NOT EXISTS salondb
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
 USE salondb;
 
+-- Drop child table first so the database can be re-imported during testing.
 DROP TABLE IF EXISTS appointments;
 DROP TABLE IF EXISTS services;
 DROP TABLE IF EXISTS users;
 
+-- Users table stores customer, staff, and admin accounts.
+-- Passwords are stored as bcrypt hashes and checked in PHP using password_verify().
 CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,
@@ -13,8 +22,9 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL,
     role ENUM('customer','staff','admin') DEFAULT 'customer',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Services table stores salon services that customers can book.
 CREATE TABLE services (
     service_id INT AUTO_INCREMENT PRIMARY KEY,
     service_name VARCHAR(100) NOT NULL,
@@ -22,8 +32,10 @@ CREATE TABLE services (
     duration_minutes INT NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     status ENUM('active','inactive') DEFAULT 'active'
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Appointments table connects a customer with one selected service.
+-- InnoDB is used so the foreign key relationships are enforced by MySQL.
 CREATE TABLE appointments (
     appointment_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -33,14 +45,24 @@ CREATE TABLE appointments (
     status ENUM('Pending','Confirmed','Completed','Cancelled') DEFAULT 'Pending',
     notes TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (service_id) REFERENCES services(service_id)
-);
+    INDEX idx_appointments_user_id (user_id),
+    INDEX idx_appointments_service_id (service_id),
+    CONSTRAINT fk_appointments_user
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_appointments_service
+        FOREIGN KEY (service_id) REFERENCES services(service_id)
+        ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Default login accounts for testing.
+-- Admin password: Admin@123
+-- Staff password: Staff@123
 INSERT INTO users (full_name, email, phone, password_hash, role) VALUES
 ('Salon Administrator', 'admin@salon.local', '0400000000', '$2y$10$foFZct4bgywgW2HXeb6Oguaew0u5V.n6n42DmTVEFUnkr.QWx9SEW', 'admin'),
 ('Salon Staff', 'staff@salon.local', '0411111111', '$2y$10$khTRcLu/8tJIe8kQYMqc4.c6jEFvDmhR3ONvk6uOAUs8CLv24havK', 'staff');
 
+-- Sample active services used by the services page and booking form.
 INSERT INTO services (service_name, category, duration_minutes, price, status) VALUES
 ('Women Haircut', 'Haircuts & Styling', 45, 55.00, 'active'),
 ('Men Haircut', 'Haircuts & Styling', 30, 35.00, 'active'),
