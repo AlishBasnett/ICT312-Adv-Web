@@ -87,7 +87,7 @@ salon-booking-system/
 
 Database name: `salondb`
 
-Tables:
+Main tables:
 
 - `users`
 - `services`
@@ -99,7 +99,9 @@ The database file is:
 database.sql
 ```
 
-It creates the database, creates all required tables, inserts one default admin account, one default staff account, and more than twenty sample salon services.
+It creates the `salondb` database, creates all required tables, and inserts one default admin account, one default staff account, and more than twenty sample salon services.
+
+The SQL file uses InnoDB tables so the appointment records can keep proper relationships with the `users` and `services` tables. The `appointments.user_id` field links to `users.user_id`, and `appointments.service_id` links to `services.service_id`.
 
 ## XAMPP/WAMP Setup Instructions
 
@@ -128,10 +130,13 @@ wamp64/www/salon-booking-system/
 http://localhost/phpmyadmin
 ```
 
-2. Click the Import tab.
+2. Click the Import tab from the main phpMyAdmin screen.
 3. Choose the `database.sql` file from the `salon-booking-system` folder.
 4. Click Go.
 5. Confirm that the `salondb` database appears in phpMyAdmin.
+6. Open `salondb` and check that these tables are visible: `users`, `services`, and `appointments`.
+
+If the database already exists during testing, the SQL file can still be imported again. It will recreate the project tables and reload the sample data.
 
 ## Update config/database.php
 
@@ -144,11 +149,19 @@ $username = 'root';
 $password = '';
 ```
 
-If your MySQL username or password is different, update:
+For a normal WAMP or XAMPP setup, these values usually do not need to be changed. If your MySQL username, password, or database name is different, update:
 
 ```text
 config/database.php
 ```
+
+The project configuration currently uses:
+
+```php
+$dbname = 'salondb';
+```
+
+This must match the database name shown in phpMyAdmin.
 
 ## Run the Project in Browser
 
