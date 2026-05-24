@@ -50,6 +50,30 @@ include __DIR__ . '/includes/header.php';
     </article>
 </section>
 
+<section class="steps-section" aria-labelledby="bookingStepsTitle">
+    <div class="section-title">
+        <p class="eyebrow">Simple customer journey</p>
+        <h2 id="bookingStepsTitle">Book in three easy steps</h2>
+    </div>
+    <div class="steps-grid">
+        <article class="step-card">
+            <span>1</span>
+            <h3>Choose a service</h3>
+            <p>Browse active services, prices, and categories before selecting what you need.</p>
+        </article>
+        <article class="step-card">
+            <span>2</span>
+            <h3>Request a time</h3>
+            <p>Submit a preferred date and time through the secure booking form.</p>
+        </article>
+        <article class="step-card">
+            <span>3</span>
+            <h3>Track status</h3>
+            <p>Customers can view booking progress while staff confirm, complete, or cancel appointments.</p>
+        </article>
+    </div>
+</section>
+
 <section class="feature-band">
     <div>
         <h2>Business Problems Solved</h2>
